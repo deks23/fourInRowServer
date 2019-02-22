@@ -9,8 +9,8 @@ public class RequestExecutorImpl implements RequestExecutor {
     private RequestExecutorImpl oponentsRequestExecutor;
     private OutboundConnection outboundConnection;
     private Database database;
-    //TODO USTAWIANIE GRACZA
     private Player player;
+    private Game game;
 
 
 
@@ -33,20 +33,29 @@ public class RequestExecutorImpl implements RequestExecutor {
                 oponentsRequestExecutor.sendResponse(response);
                 break;
             case MOVE:
-                //TODO WYKONANIE RUCHU
-
-
+                MoveRequest moveRequest = (MoveRequest)request;
+                game.makeMove(moveRequest.getGameField());
+                if(!game.won()){
+                    oponentsRequestExecutor.sendResponse(new Response(ResponseStatus.MOVE));
+                }else{
+                    oponentsRequestExecutor.sendResponse(new Response(ResponseStatus.LOST));
+                    game.disconnect();
+                    sendResponse(new Response(ResponseStatus.WON));
+                }
                 break;
             case FIND_GAME:
                 database = Database.getInstance();
                 database.save(this.player);
+                Player oponent = null;
                 try {
-                    database.getRandomPlayer(player);
+                    oponent = database.getRandomPlayer(player);
                 } catch (LackOfPlayersException e) {
                     response = new Response();
                     response.setResponseStatus(ResponseStatus.NO_PLAYERS);
                 }
-
+                game = new Game(this.player, oponent);
+                game.initConnection();
+                getOponentsRequestExecutor().sendResponse(new Response(ResponseStatus.START));
                 break;
         }
     }
@@ -92,7 +101,7 @@ public class RequestExecutorImpl implements RequestExecutor {
                 return response;
 
             case MOVE:
-                //TODO WYKONANIE RUCHU
+
                 break;
 
         }
@@ -129,5 +138,15 @@ public class RequestExecutorImpl implements RequestExecutor {
         return null;
     }
 
+    public RequestExecutorImpl getOponentsRequestExecutor() {
+        return oponentsRequestExecutor;
+    }
 
+    public void setOponentsRequestExecutor(RequestExecutorImpl oponentsRequestExecutor) {
+        this.oponentsRequestExecutor = oponentsRequestExecutor;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
+    }
 }
