@@ -26,10 +26,12 @@ public class RequestExecutorImpl implements RequestExecutor {
                 response = requestToResponse(request);
                 if (response==null)
                     break;
-                oponentsRequestExecutor.sendResponse(response);
+                this.sendResponse(response);
                 break;
             case MOVE:
                 //TODO WYKONANIE RUCHU
+
+
                 break;
             case FIND_GAME:
                 database = Database.getInstance();

@@ -1,6 +1,8 @@
 package pl.damiankotynia.fourinrow.server.connector;
 
 import pl.damiankotynia.fourinrow.model.Request;
+import pl.damiankotynia.fourinrow.model.RequestExecutor;
+import pl.damiankotynia.fourinrow.server.service.RequestExecutorImpl;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -19,6 +21,7 @@ public class Connection implements Runnable {
     private List<Connection> connectionList;
     private boolean running;
     private OutboundConnection outboundConnection;
+    private RequestExecutor requestExecutor;
 
     public Connection(Socket socket, int client, List<Connection> connectionList) {
         System.out.println(INBOUND_CONNECTION_LOGGER + "New Connection");
@@ -33,6 +36,7 @@ public class Connection implements Runnable {
         this.socket = socket;
         this.connectionList = connectionList;
         this.running = true;
+        this.requestExecutor = new RequestExecutorImpl(outboundConnection);
     }
 
     public void run() {
@@ -40,6 +44,7 @@ public class Connection implements Runnable {
             try {
                 Object request = inputStream.readObject();
                 //TODO WYWOŁANIE REQUEST EXECUTORA
+                requestExecutor.executeRequest((Request)request);
 
 
             } catch (SocketException e) {
