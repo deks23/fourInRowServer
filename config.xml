@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<FourInRowConfig>
+    <ServerSocket value = "4444"/>
+    <GameParams>
+        <Height>6</Height>
+        <Width>7</Width>
+    </GameParams>
+
+</FourInRowConfig>

@@ -18,6 +18,10 @@ public class RequestExecutorImpl implements RequestExecutor {
         this.outboundConnection = outboundConnection;
     }
 
+    /**
+     * Executes request recieved from player
+     * @param request request to execute
+     */
     @Override
     public void executeRequest(Request request){
         Response response;
@@ -26,7 +30,7 @@ public class RequestExecutorImpl implements RequestExecutor {
                 response = requestToResponse(request);
                 if (response==null)
                     break;
-                this.sendResponse(response);
+                oponentsRequestExecutor.sendResponse(response);
                 break;
             case MOVE:
                 //TODO WYKONANIE RUCHU
@@ -48,6 +52,11 @@ public class RequestExecutorImpl implements RequestExecutor {
     }
 
 
+    /**
+     * Sends response to RequestExecutor owner
+     * @param response response to send
+     */
+
 
     @Override
     public void sendResponse(Response response) {
@@ -61,8 +70,13 @@ public class RequestExecutorImpl implements RequestExecutor {
     public void setPlayer(Player player) {
         this.player = player;
     }
-    //TODO zamiany request <=> response
-    public Response requestToResponse(Request request){
+
+    /**
+     * Convert recieved request to response
+     * @param request Request to convert
+     * @return  Response
+     */
+    private Response requestToResponse(Request request){
 
         switch (request.getRequestType()){
             case MESSAGE:
@@ -85,7 +99,13 @@ public class RequestExecutorImpl implements RequestExecutor {
         return null;
     }
 
-    public Request responseToRequest(Response response){
+
+    /**
+     * Converts Recieved response to request
+     * @param response  response to convert
+     * @return  request to send
+     */
+    private Request responseToRequest(Response response){
 
         switch (response.getResponseStatus()){
             case MESSAGE:
