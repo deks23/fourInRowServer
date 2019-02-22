@@ -20,7 +20,6 @@ public class Configuration {
     private int width;
     private int height;
 
-    Object element;
     private Configuration() throws Exception {
         File file = new File("config.xml");
         DocumentBuilder documentBuilder = null;
@@ -66,4 +65,17 @@ public class Configuration {
             return instance;
         }
     }
+
+    public int getPort() {
+        return port;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
 }

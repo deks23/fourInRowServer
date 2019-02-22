@@ -7,12 +7,13 @@ import pl.damiankotynia.fourinrow.server.service.Configuration;
 
 public class Main {
     public static void main(String[] args){
+        Configuration configuration=null;
         try {
-            Configuration.getInstance();
+            configuration = Configuration.getInstance();
         } catch (Exception e) {
             System.out.println("Nie udało się wczytać konfiguracji");
             System.exit(-1);
         }
-        new Thread(new Connector(4444)).start();
+        new Thread(new Connector(configuration.getPort())).start();
     }
 }
