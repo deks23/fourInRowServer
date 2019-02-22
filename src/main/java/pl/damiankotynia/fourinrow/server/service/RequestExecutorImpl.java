@@ -25,7 +25,12 @@ public class RequestExecutorImpl implements RequestExecutor {
     @Override
     public void executeRequest(Request request){
         Response response;
+        if(player==null){
+            setPlayer(request.getPlayer());
+            player.setRequestExecutor(this);
+        }
         switch (request.getRequestType()){
+
             case MESSAGE:
                 response = requestToResponse(request);
                 if (response==null)
@@ -49,13 +54,14 @@ public class RequestExecutorImpl implements RequestExecutor {
                 Player oponent = null;
                 try {
                     oponent = database.getRandomPlayer(player);
+                    game = new Game(this.player, oponent);
+                    game.initConnection();
+                    getOponentsRequestExecutor().sendResponse(new Response(ResponseStatus.START));
                 } catch (LackOfPlayersException e) {
                     response = new Response();
                     response.setResponseStatus(ResponseStatus.NO_PLAYERS);
                 }
-                game = new Game(this.player, oponent);
-                game.initConnection();
-                getOponentsRequestExecutor().sendResponse(new Response(ResponseStatus.START));
+
                 break;
         }
     }
@@ -120,7 +126,7 @@ public class RequestExecutorImpl implements RequestExecutor {
             case MESSAGE:
                 //TODO WYSYŁKA WIDOMOŚCI DO DRUGIEGO GRACZA
                 MessageResponse messageResponse = (MessageResponse)response;
-                MessageRequest request = new MessageRequest();
+                MessageRequest request = new MessageRequest(player);
                 request.setRequestType(RequestType.MESSAGE);
                 if (Utils.isEmpty(messageResponse.getMessage())){
                     request.setMessage(" ");

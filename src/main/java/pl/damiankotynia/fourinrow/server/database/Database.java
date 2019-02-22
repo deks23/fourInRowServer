@@ -51,8 +51,9 @@ public class Database {
             secondIndex = random.nextInt(waitingPlayers.size());
         }
         Player secondPlayer = waitingPlayers.get(secondIndex);
-        waitingPlayers.remove(firstIndex);
-        waitingPlayers.remove(secondIndex);
+        waitingPlayers.remove(firstPlayer);
+        waitingPlayers.remove(secondPlayer);
+
         return secondPlayer;
     }
 
