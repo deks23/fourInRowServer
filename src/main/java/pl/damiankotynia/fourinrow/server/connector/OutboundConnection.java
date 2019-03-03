@@ -1,5 +1,7 @@
 package pl.damiankotynia.fourinrow.server.connector;
 
+import pl.damiankotynia.fourinrow.model.Response;
+
 import java.io.*;
 
 import static pl.damiankotynia.fourinrow.server.service.Utils.OUTBOUND_CONNECTION_LOGGER;
@@ -30,7 +32,7 @@ public class OutboundConnection{
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println(OUTBOUND_CONNECTION_LOGGER + " sending " );
+        System.out.println(OUTBOUND_CONNECTION_LOGGER + " sending " + ((Response)object).getResponseStatus());
         try {
             outputStream.writeObject(object);
         } catch (IOException e) {

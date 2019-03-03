@@ -2,6 +2,8 @@ package pl.damiankotynia.fourinrow.server.connector;
 
 import pl.damiankotynia.fourinrow.model.Request;
 import pl.damiankotynia.fourinrow.model.RequestExecutor;
+import pl.damiankotynia.fourinrow.model.Response;
+import pl.damiankotynia.fourinrow.model.ResponseStatus;
 import pl.damiankotynia.fourinrow.server.service.RequestExecutorImpl;
 
 import java.io.IOException;
@@ -53,6 +55,12 @@ public class Connection implements Runnable {
                 connectionList.remove(this);
             } catch (IOException e) {
                 System.out.println(INBOUND_CONNECTION_LOGGER + "Zerwano połączenie2");
+                Response response = new Response(ResponseStatus.OPONENT_DISCONECTED);
+                ((RequestExecutorImpl)requestExecutor).setGame(null);
+                if(((RequestExecutorImpl)requestExecutor).getOponentsRequestExecutor()!=null){
+                    ((RequestExecutorImpl)requestExecutor).getOponentsRequestExecutor().sendResponse(response);
+                    ((RequestExecutorImpl)requestExecutor).getOponentsRequestExecutor().disconetFromOponent();
+                }
                 running = !running;
                 connectionList.remove(this);
             } catch (ClassNotFoundException e) {

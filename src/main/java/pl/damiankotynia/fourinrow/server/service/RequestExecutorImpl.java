@@ -95,7 +95,6 @@ public class RequestExecutorImpl implements RequestExecutor {
 
         switch (request.getRequestType()){
             case MESSAGE:
-                //TODO WYSYŁKA WIDOMOŚCI DO DRUGIEGO GRACZA
                 MessageRequest messageRequest = (MessageRequest)request;
                 MessageResponse response = new MessageResponse();
                 response.setResponseStatus(ResponseStatus.MESSAGE);
@@ -144,12 +143,21 @@ public class RequestExecutorImpl implements RequestExecutor {
         return null;
     }
 
+    public void disconetFromOponent(){
+        oponentsRequestExecutor = null;
+        game = null;
+    }
+
     public RequestExecutorImpl getOponentsRequestExecutor() {
         return oponentsRequestExecutor;
     }
 
     public void setOponentsRequestExecutor(RequestExecutorImpl oponentsRequestExecutor) {
         this.oponentsRequestExecutor = oponentsRequestExecutor;
+    }
+
+    public Game getGame() {
+        return game;
     }
 
     public void setGame(Game game) {
