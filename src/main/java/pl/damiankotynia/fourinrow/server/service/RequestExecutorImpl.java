@@ -57,9 +57,11 @@ public class RequestExecutorImpl implements RequestExecutor {
                     game = new Game(this.player, oponent);
                     game.initConnection();
                     getOponentsRequestExecutor().sendResponse(new Response(ResponseStatus.START));
+                    outboundConnection.writeObject(new Response(ResponseStatus.START));
                 } catch (LackOfPlayersException e) {
                     response = new Response();
                     response.setResponseStatus(ResponseStatus.NO_PLAYERS);
+                    outboundConnection.writeObject(response);
                 }
 
                 break;
@@ -123,7 +125,6 @@ public class RequestExecutorImpl implements RequestExecutor {
 
         switch (response.getResponseStatus()){
             case MESSAGE:
-                //TODO WYSYŁKA WIDOMOŚCI DO DRUGIEGO GRACZA
                 MessageResponse messageResponse = (MessageResponse)response;
                 MessageRequest request = new MessageRequest(player);
                 request.setRequestType(RequestType.MESSAGE);
@@ -138,6 +139,7 @@ public class RequestExecutorImpl implements RequestExecutor {
             case MOVE:
                 //TODO WYKONANIE RUCHU
                 break;
+
 
         }
         return null;
