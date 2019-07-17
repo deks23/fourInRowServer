@@ -45,7 +45,6 @@ public class Connection implements Runnable {
         while (running) {
             try {
                 Object request = inputStream.readObject();
-                //TODO WYWOŁANIE REQUEST EXECUTORA
                 requestExecutor.executeRequest((Request)request);
 
 

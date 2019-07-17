@@ -14,18 +14,25 @@ public class Game {
         this.player1 = player1;
         this.player2 = player2;
         this.whosTurn = player1;
-        this.gameField = new GameField(Main.width, Main.height);
+        this.gameField = new GameField();
         this.player1.setPlayerSign(1);
         this.player2.setPlayerSign(2);
     }
 
+    /**
+     * Connects players requestExecutors
+     */
     public void initConnection(){
         RequestExecutorImpl requestExecutor1 = (RequestExecutorImpl)player1.getRequestExecutor();
         RequestExecutorImpl requestExecutor2 = (RequestExecutorImpl)player2.getRequestExecutor();
         requestExecutor1.setOponentsRequestExecutor(requestExecutor2);
         requestExecutor2.setOponentsRequestExecutor(requestExecutor1);
+        requestExecutor2.setGame(this);
     }
 
+    /**
+     * Disconnects players requestExecutors
+     */
     public void disconnect(){
         RequestExecutorImpl requestExecutor1 = (RequestExecutorImpl)player1.getRequestExecutor();
         RequestExecutorImpl requestExecutor2 = (RequestExecutorImpl)player2.getRequestExecutor();
@@ -45,5 +52,7 @@ public class Game {
         this.gameField = gameField;
     }
 
-
+    public GameField getGameField() {
+        return gameField;
+    }
 }

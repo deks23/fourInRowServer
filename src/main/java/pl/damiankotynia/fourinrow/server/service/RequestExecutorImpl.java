@@ -41,7 +41,8 @@ public class RequestExecutorImpl implements RequestExecutor {
                 MoveRequest moveRequest = (MoveRequest)request;
                 game.makeMove(moveRequest.getGameField());
                 if(!game.won()){
-                    oponentsRequestExecutor.sendResponse(new Response(ResponseStatus.MOVE));
+                    response = new MoveResponse(ResponseStatus.MOVE, game.getGameField());
+                    oponentsRequestExecutor.sendResponse(response);
                 }else{
                     oponentsRequestExecutor.sendResponse(new Response(ResponseStatus.LOST));
                     game.disconnect();
@@ -56,8 +57,8 @@ public class RequestExecutorImpl implements RequestExecutor {
                     oponent = database.getRandomPlayer(player);
                     game = new Game(this.player, oponent);
                     game.initConnection();
-                    getOponentsRequestExecutor().sendResponse(new Response(ResponseStatus.START));
-                    outboundConnection.writeObject(new Response(ResponseStatus.START));
+                    outboundConnection.writeObject(new StartGameResponse(ResponseStatus.START,1 ));
+                    getOponentsRequestExecutor().sendResponse(new StartGameResponse(ResponseStatus.START,2));
                 } catch (LackOfPlayersException e) {
                     response = new Response();
                     response.setResponseStatus(ResponseStatus.NO_PLAYERS);
@@ -137,7 +138,7 @@ public class RequestExecutorImpl implements RequestExecutor {
                 return request;
 
             case MOVE:
-                //TODO WYKONANIE RUCHU
+
                 break;
 
 
